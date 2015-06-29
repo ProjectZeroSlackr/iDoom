@@ -589,11 +589,19 @@ void IdentifyVersion (void)
     char *doomwaddir;
     doomwaddir = getenv("DOOMWADDIR");
     if (!doomwaddir)
-	doomwaddir = ".";
+	doomwaddir = "/opt/Media/iDoom/IWADs";
 
     // Commercial.
-    doom2wad = malloc(strlen(doomwaddir)+1+9+1);
-    sprintf(doom2wad, "%s/doom2.wad", doomwaddir);
+    if (M_CheckParm ("-freedoom")) {
+        // Note that FreeDM is just an empty IWAD with no monsters
+        // It is used here intended as an IWAD lump supplier for PWADs
+        // The FreeDoom IWAD does not work with vanilla Doom unfortunately
+        doom2wad = malloc(strlen(doomwaddir)+1+10+1);
+        sprintf(doom2wad, "%s/freedm.wad", doomwaddir);
+    } else {
+        doom2wad = malloc(strlen(doomwaddir)+1+9+1);
+        sprintf(doom2wad, "%s/doom2.wad", doomwaddir);
+    }
 
     // Retail.
     doomuwad = malloc(strlen(doomwaddir)+1+8+1);
@@ -620,11 +628,8 @@ void IdentifyVersion (void)
     doom2fwad = malloc(strlen(doomwaddir)+1+10+1);
     sprintf(doom2fwad, "%s/doom2f.wad", doomwaddir);
 
-    home = getenv("HOME");
-    if (!home)
-	home = ".";
-//      I_Error("Please set $HOME to your home directory");
-    sprintf(basedefault, "%s/.doomrc", home);
+    home = "/opt/Media/iDoom/Conf";
+    sprintf(basedefault, "%s/doom.rc", home);
 #endif
 
     if (M_CheckParm ("-shdev"))
@@ -827,6 +832,7 @@ void D_DoomMain (void)
     else if (M_CheckParm ("-deathmatch"))
 	deathmatch = 1;
 
+	/*
     switch ( gamemode )
     {
       case retail:
@@ -857,6 +863,7 @@ void D_DoomMain (void)
 		 "                           ",
 		 VERSION/100,VERSION%100);
 	break;
+	*/
 /*FIXME
        case pack_plut:
 	sprintf (title,
@@ -873,6 +880,7 @@ void D_DoomMain (void)
 		 VERSION/100,VERSION%100);
 	break;
 */
+	/*
       default:
 	sprintf (title,
 		 "                     "
@@ -883,6 +891,7 @@ void D_DoomMain (void)
     }
     
     printf ("%s\n",title);
+	*/
 
     if (devparm)
 	printf(D_DEVSTR);
@@ -1021,16 +1030,16 @@ void D_DoomMain (void)
     }
     
     // init subsystems
-    printf ("V_Init: allocate screens.\n");
+    //printf ("V_Init: allocate screens.\n");
     V_Init ();
 
-    printf ("M_LoadDefaults: Load system defaults.\n");
+    //printf ("M_LoadDefaults: Load system defaults.\n");
     M_LoadDefaults ();              // load before initing other systems
 
-    printf ("Z_Init: Init zone memory allocation daemon. \n");
+    //printf ("Z_Init: Init zone memory allocation daemon. \n");
     Z_Init ();
 
-    printf ("W_Init: Init WADfiles.\n");
+    //printf ("W_Init: Init WADfiles.\n");
     W_InitMultipleFiles (wadfiles);
     
 
@@ -1047,6 +1056,7 @@ void D_DoomMain (void)
 	};
 	int i;
 	
+	/*
 	if ( gamemode == shareware)
 	    I_Error("\nYou cannot -file with the shareware "
 		    "version. Register!");
@@ -1057,12 +1067,15 @@ void D_DoomMain (void)
 	    for (i = 0;i < 23; i++)
 		if (W_CheckNumForName(name[i])<0)
 		    I_Error("\nThis is not the registered version.");
+	*/
     }
     
     // Iff additonal PWAD files are used, print modified banner
+	/*
     if (modifiedgame)
     {
-	/*m*/printf (
+	*/
+	/*m*//*printf (
 	    "===========================================================================\n"
 	    "ATTENTION:  This version of DOOM has been modified.  If you would like to\n"
 	    "get a copy of the original game, call 1-800-IDGAMES or see the readme file.\n"
@@ -1071,10 +1084,11 @@ void D_DoomMain (void)
 	    "===========================================================================\n"
 	    );
 	getchar ();
-    }
+    }*/
 	
 
     // Check and print which version is executed.
+	/*
     switch ( gamemode )
     {
       case shareware:
@@ -1100,31 +1114,32 @@ void D_DoomMain (void)
 	// Ouch.
 	break;
     }
+	*/
 
-    printf ("M_Init: Init miscellaneous info.\n");
+    //printf ("M_Init: Init miscellaneous info.\n");
     M_Init ();
 
-    printf ("R_Init: Init DOOM refresh daemon - ");
+    //printf ("R_Init: Init DOOM refresh daemon - ");
     R_Init ();
 
-    printf ("\nP_Init: Init Playloop state.\n");
+    //printf ("\nP_Init: Init Playloop state.\n");
     P_Init ();
 
-    printf ("I_Init: Setting up machine state.\n");
+    //printf ("I_Init: Setting up machine state.\n");
     I_Init ();
 
-    printf ("D_CheckNetGame: Checking network game status.\n");
+    //printf ("D_CheckNetGame: Checking network game status.\n");
     D_CheckNetGame ();
 
 #ifdef USE_SOUND
-   printf ("S_Init: Setting up sound.\n");
+   //printf ("S_Init: Setting up sound.\n");
     S_Init (snd_SfxVolume /* *8 */, snd_MusicVolume /* *8*/ );
 #endif
 
-    printf ("HU_Init: Setting up heads up display.\n");
+    //printf ("HU_Init: Setting up heads up display.\n");
     HU_Init ();
 
-    printf ("ST_Init: Init status bar.\n");
+    //printf ("ST_Init: Init status bar.\n");
     ST_Init ();
 
     // check for a driver that wants intermission stats
@@ -1135,7 +1150,7 @@ void D_DoomMain (void)
 	extern  void*	statcopy;                            
 
 	statcopy = (void*)atoi(myargv[p+1]);
-	printf ("External statistics registered.\n");
+	//printf ("External statistics registered.\n");
     }
     
     // start the apropriate game based on parms

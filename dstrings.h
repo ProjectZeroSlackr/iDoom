@@ -38,7 +38,7 @@
 #endif
 
 // Misc. other strings.
-#define SAVEGAMENAME	"doomsav"
+#define SAVEGAMENAME	"/opt/Media/iDoom/Saves/doomsav"
 
 
 //

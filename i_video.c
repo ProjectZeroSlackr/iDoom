@@ -301,11 +301,18 @@ void I_InitGraphics(void)
 #endif // FPSCOUNT
 	
 	printf("iPod port by: Benjamin Eriksson & Mattias Pierre\n");
+	printf("Modified by Keripo for ZeroSlackr\n");
 	sleep(1);
 	
 	startKeyHandler();
 	get_ipod_hw_info(&info);
-	parseKeyMapFile("keys.key");
+	char keys[128];
+	char *home;
+	home = getenv("HOME");
+	if (!home)
+		home = "/opt/Media/iDoom/Conf";
+	sprintf(keys, "%s/keys.key", home);
+	parseKeyMapFile(keys);
 	
 	// NOTE: The blitter can only blit widths that are multiples of 4.
 	// TODO: Fix this.

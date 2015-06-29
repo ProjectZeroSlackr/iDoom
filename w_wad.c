@@ -156,7 +156,7 @@ void W_AddFile (char *filename)
 	return;
     }
 
-    printf (" adding %s\n",filename);
+    printf ("WAD: %s\n",filename);
     startlump = numlumps;
 	
     if (strcmpi (filename+strlen(filename)-3 , "wad" ) )
